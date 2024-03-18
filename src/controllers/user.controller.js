@@ -4,7 +4,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const generateAccessAndRefreshToken = async (userId) => {
     const user = await User.findById(userId)
@@ -55,7 +55,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const coverImage = await uploadOnCloudinary(localcoverImagePath)
 
     if (!avatar) {
-        throw new ApiError(400, "Avatar file is required.")
+        throw new ApiError(400, "Error while uploading avatar file")
     }
 
     const user = await User.create({
@@ -357,10 +357,10 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
         {
             $addFields: {
                 subscriberCount: {
-                    $size: "subscribers"
+                    $size: "$subscribers"
                 },
                 channelsSubscribedToCount: {
-                    $size: "subscribedTo"
+                    $size: "$subscribedTo"
                 },
                 isSubscribed: {
                     $cond: {
@@ -406,7 +406,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     const user = await User.aggregate([
         {
             $match: {
-                _id: new mongoose.Types.ObjectId(req.user._id)
+                _id: new Schema.Types.ObjectId(req.user._id)
                 // ref:req.user._id
             }
         },
