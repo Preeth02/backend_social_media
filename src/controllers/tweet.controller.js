@@ -28,6 +28,10 @@ const createTweet = asyncHandler(async (req, res) => {
 const getUserTweets = asyncHandler(async (req, res) => {
     const { owner } = req.params
 
+    if (!isValidObjectId(owner)) {
+        throw new ApiError(404, "Invalid owner id")
+    }
+
     console.log(owner)
     const tweet = await Tweet.aggregate([
         {
@@ -54,6 +58,11 @@ const getUserTweets = asyncHandler(async (req, res) => {
 const updateTweet = asyncHandler(async (req, res) => {
     const { content } = req.body
     const { tweetId } = req.params
+
+    if (!isValidObjectId(tweetId)) {
+        throw new ApiError(404, "Invalid tweet id")
+    }
+
 
     if (!content && content.length < 8) {
         throw new ApiError(400, "Content is too small to update")
@@ -82,6 +91,11 @@ const updateTweet = asyncHandler(async (req, res) => {
 
 const deleteTweet = asyncHandler(async (req, res) => {
     const { tweetId } = req.params
+
+    if (!isValidObjectId(tweetId)) {
+        throw new ApiError(404, "Invalid tweet id")
+    }
+
 
     const tweet = await Tweet.findByIdAndDelete(tweetId)
 
