@@ -40,10 +40,29 @@ const getUserTweets = asyncHandler(async (req, res) => {
             }
         },
         {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner",
+                pipeline: [
+                    {
+                        $project: {
+                            _id: 1,
+                            username: 1,
+                            fullName: 1,
+                            avatar: 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
             $project: {
                 content: 1,
                 owner: 1,
-                createdAt: 1
+                createdAt: 1,
+                updatedAt: 1
             }
         }
     ])
