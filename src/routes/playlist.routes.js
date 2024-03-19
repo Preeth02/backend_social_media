@@ -5,16 +5,18 @@ import { verifyPlaylistOwner } from "../middlewares/isPlaylistOwner.middleware.j
 
 const router = Router()
 
-router.route("/create-playlist").post(verifyJWT, createPlaylist)
+router.use(verifyJWT)
 
-router.route("/user-playlists/:userId").get(verifyJWT, getUserPlaylists)
-router.route("/get-user-playlist/:playlistId").get(verifyJWT, getPlaylistById)
+router.route("/create-playlist").post(createPlaylist)
 
-router.route("/add-videoto-playlist/:playlistId/:videoId").patch(verifyJWT, verifyPlaylistOwner, addVideoToPlaylist)
-router.route("/remove-video-playlist/:playlistId/:videoId").patch(verifyJWT, verifyPlaylistOwner, removeVideoFromPlaylist)
+router.route("/user-playlists/:userId").get(getUserPlaylists)
+router.route("/get-user-playlist/:playlistId").get(getPlaylistById)
 
-router.route("/delete-playlist/:playlistId").post(verifyJWT, verifyPlaylistOwner, deletePlaylist)
+router.route("/add-videoto-playlist/:playlistId/:videoId").patch(verifyPlaylistOwner, addVideoToPlaylist)
+router.route("/remove-video-playlist/:playlistId/:videoId").patch(verifyPlaylistOwner, removeVideoFromPlaylist)
 
-router.route("/update-playlist/:playlistId").patch(verifyJWT, verifyPlaylistOwner, updatePlaylist)
+router.route("/delete-playlist/:playlistId").post(verifyPlaylistOwner, deletePlaylist)
+
+router.route("/update-playlist/:playlistId").patch(verifyPlaylistOwner, updatePlaylist)
 
 export default router
