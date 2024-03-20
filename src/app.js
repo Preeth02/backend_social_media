@@ -20,6 +20,7 @@ import playlistRouter from "./routes/playlist.routes.js"
 import commentRouter from "./routes/comment.routes.js"
 import likeRouter from "./routes/like.routes.js"
 import subscriptonRouter from "./routes/subscripton.routes.js"
+import healthcheckRouter from "./routes/healthcheck.routes.js"
 // ******Routes declaration..*******
 // app.use("/users", userRouter)          ***This can be used but more standard way practice is as follows***
 app.use("/api/v1/users", userRouter)
@@ -35,4 +36,7 @@ app.use("/api/v1/comment", commentRouter)
 app.use("/api/v1/like", likeRouter)
 
 app.use("/api/v1/subscription", subscriptonRouter)
+
+app.use("/api/v1/healthcheck", healthcheckRouter)
+
 export default app
