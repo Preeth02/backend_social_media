@@ -139,6 +139,10 @@ const getVideoById = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Video is not available")
     }
 
+    // Views will increase if anybody see the video
+    video.views += 1
+    await video.save({ validateBeforesave: false })
+
     return res
         .status(201)
         .json(
